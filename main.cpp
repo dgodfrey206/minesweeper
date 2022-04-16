@@ -11,11 +11,23 @@ public:
         for (int i = 0; i < nFieldWidth*nFieldHeight; i++) {
             btns[i] = new wxButton(this, 1000 + i, " ");
             grid->Add(btns[i], 1, wxEXPAND | wxALL);
+            btns[i]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &Simple::on_button_clicked, this);
         }
         this->SetSizer(grid);
         grid->Layout();
         Centre();
 	}
+
+    void on_button_clicked(xwCommandEvent& evt) {
+        int x = (evt.GetId() - 10000) % nFieldWidth;
+        int y = (evt.GetId() - 10000) / nFieldWidth;
+        
+        evt.Skip();
+    }
+
+    ~Simple() {
+        delete[] btns;
+    }
     
 private:
     int nFieldHeight = 10;
@@ -23,7 +35,7 @@ private:
     wxButton** btns = nullptr;
 
 
-    //wxDECLARE_EVENT_TABLE();
+    wxDECLARE_EVENT_TABLE();
 };
 
 /*wxBEGIN_EVENT_TABLE(Simple, wxFrame)
