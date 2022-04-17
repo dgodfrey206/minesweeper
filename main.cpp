@@ -8,7 +8,8 @@ class Minesweeper : public wxFrame {
       : wxFrame(NULL, wxID_ANY, title, wxPoint(30, 30), wxSize(800, 600)) {
     wxGridSizer* grid = new wxGridSizer(n, n, 0, 0);
 
-    wxFont font(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
+    wxFont font(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD,
+                false);
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
         board[i][j] = new wxButton(this, 10000 + idx(i, j), " ");
@@ -21,8 +22,6 @@ class Minesweeper : public wxFrame {
         board[i][j]->Bind(wxEVT_RIGHT_DOWN, &Minesweeper::on_right_click, this);
       }
     }
-
-
 
     for (int i = 0, nMines = 30; i < nMines;) {
       int y = rand() % n, x = rand() % n;
@@ -59,22 +58,22 @@ class Minesweeper : public wxFrame {
   void on_left_click(wxCommandEvent& evt) {
     int y = (evt.GetId() - 10000) / n;
     int x = (evt.GetId() - 10000) % n;
-    
+
     if (gameOver || isMine(y, x)) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (isMine(i, j)) {
-                    board[i][j]->SetBackgroundColour(wxColour(207, 21, 33, 70));
-                    board[i][j]->SetLabel("*");
-                }
-            }
+      for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+          if (isMine(i, j)) {
+            board[i][j]->SetBackgroundColour(wxColour(207, 21, 33, 70));
+            board[i][j]->SetLabel("*");
+          }
         }
-        wxMessageBox("GAMEOVER");
-        gameOver = true;
-        return;
+      }
+      wxMessageBox("GAMEOVER");
+      gameOver = true;
+      return;
     }
     board[y][x]->Enable(false);
-    
+
     board[y][x]->SetLabel(dfs(y, x));
     evt.Skip();
   }
@@ -83,11 +82,11 @@ class Minesweeper : public wxFrame {
     int y = (evt.GetId() - 10000) / n;
     int x = (evt.GetId() - 10000) % n;
     if (board[y][x]->GetLabel() == "?")
-        board[y][x]->SetLabel("M");
+      board[y][x]->SetLabel("M");
     else if (board[y][x]->GetLabel() == "M")
-        board[y][x]->SetLabel("#");
+      board[y][x]->SetLabel("#");
     else if (board[y][x]->GetLabel() == "#")
-        board[y][x]->SetLabel("?");
+      board[y][x]->SetLabel("?");
   }
 
   std::string dfs(bool(&visited)[n][n], int y, int x) {
@@ -103,11 +102,10 @@ class Minesweeper : public wxFrame {
       else
         neighbors.push_back({y + dy[i], x + dx[i]});
     }
-    
+
     if (count == 0) {
       for (auto p : neighbors) {
-        board[p.first][p.second]->SetLabel(
-            dfs(visited, p.first, p.second));
+        board[p.first][p.second]->SetLabel(dfs(visited, p.first, p.second));
       }
       board[y][x]->SetBackgroundColour(wxColour(*wxWHITE));
       return " ";
@@ -121,18 +119,18 @@ class Minesweeper : public wxFrame {
   }
 
   void keyPressed(wxMouseEvent& event) {
-      cout<<565<<endl;
-    //   if (event.GetKeyCode() == WXK_ESCAPE) {
-    //       std::exit(0);
-    //   }
+    if (event.GetKeyCode() == WXK_ESCAPE) {
+      std::exit(0);
+    }
+    event.Skip();
   }
 
   wxDECLARE_EVENT_TABLE();
 };
 
- wxBEGIN_EVENT_TABLE(Minesweeper, wxFrame)
+wxBEGIN_EVENT_TABLE(Minesweeper, wxFrame)
     EVT_MOTION(Minesweeper::keyPressed)
- wxEND_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 class MyApp : public wxApp {
  public:
