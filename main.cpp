@@ -5,6 +5,9 @@ class Minesweeper : public wxFrame {
  public:
   Minesweeper(const wxString& title)
       : wxFrame(NULL, wxID_ANY, title, wxPoint(30, 30), wxSize(800, 600)) {
+    wxPanel* mainPane = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxWANTS_CHARS);
+    mainPane->Bind(wxEVT_CHAR_HOOK, &Minesweeper::onKeyDown, this);
+
     wxGridSizer* grid = new wxGridSizer(n, n, 0, 0);
 
     wxFont font(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD,
@@ -71,8 +74,8 @@ class Minesweeper : public wxFrame {
       gameOver = true;
       return;
     }
-    board[y][x]->Enable(false);
 
+    board[y][x]->Enable(false);
     board[y][x]->SetLabel(dfs(y, x));
     evt.Skip();
   }
@@ -117,19 +120,14 @@ class Minesweeper : public wxFrame {
     return dfs(visited, y, x);
   }
 
-  void keyPressed(wxMouseEvent& event) {
-    // if (event.GetKeyCode() == WXK_ESCAPE) {
-    //   std::exit(0);
-    // }
+  void onKeyDown(wxKeyEvent& event) {
+    if (event.GetKeyCode() == WXK_ESCAPE) {
+      std::exit(0);
+    }
     event.Skip();
   }
-
-  wxDECLARE_EVENT_TABLE();
 };
 
-wxBEGIN_EVENT_TABLE(Minesweeper, wxFrame)
-    EVT_MOTION(Minesweeper::keyPressed)
-wxEND_EVENT_TABLE()
 
 class MyApp : public wxApp {
  public:
