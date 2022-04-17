@@ -1,6 +1,5 @@
 #include <wx/wx.h>
 #include <ctime>
-using namespace std;
 
 class Minesweeper : public wxFrame {
  public:
@@ -119,9 +118,9 @@ class Minesweeper : public wxFrame {
   }
 
   void keyPressed(wxMouseEvent& event) {
-    if (event.GetKeyCode() == WXK_ESCAPE) {
-      std::exit(0);
-    }
+    // if (event.GetKeyCode() == WXK_ESCAPE) {
+    //   std::exit(0);
+    // }
     event.Skip();
   }
 
