@@ -1,6 +1,4 @@
 # Minesweeper
-Minesweeper GUI
-
 Minesweeper GUI made with wxWidgets.
 
 For future reference, this program is compiled using. 
